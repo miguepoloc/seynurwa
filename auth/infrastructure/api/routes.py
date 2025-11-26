@@ -1,11 +1,7 @@
 """FastAPI routes for authentication."""
 
-import os
-from typing import Generator
-
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import Session
 
 from auth.application.dtos.login_dto import LoginDTO
 from auth.application.dtos.register_dto import RegisterDTO
@@ -19,27 +15,10 @@ from auth.domain.exceptions.auth_errors import (
     InvalidCredentialsError
 )
 from auth.infrastructure.database.repository import UserRepository
-
-# Database engine (sync)
-DATABASE_URL = os.getenv("DATABASE_URL")
-engine = create_engine(DATABASE_URL, echo=False)
-SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+from common.infrastructure.database.session import get_db_session
 
 # Router
 router = APIRouter()
-
-# Dependency for database session
-def get_db_session() -> Generator[Session, None, None]:
-    """Get database session."""
-    session = SessionLocal()
-    try:
-        yield session
-        session.commit()
-    except Exception:
-        session.rollback()
-        raise
-    finally:
-        session.close()
 
 
 @router.post("/register", response_model=UserDTO, status_code=status.HTTP_201_CREATED)

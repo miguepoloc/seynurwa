@@ -11,8 +11,12 @@ from alembic import context
 # Load environment variables from .env file
 load_dotenv()
 
-# Import models
-from auth.infrastructure.database.models import Base
+# Import shared base
+from common.infrastructure.database.base import Base
+
+# Import all models so Alembic can detect them
+from auth.infrastructure.database.models import UserModel  # noqa: F401
+from emotions.infrastructure.database.models import EmotionModel  # noqa: F401
 
 # Alembic Config
 config = context.config

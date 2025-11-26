@@ -5,9 +5,8 @@ from uuid import uuid4
 
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import declarative_base
 
-Base = declarative_base()
+from common.infrastructure.database.base import Base
 
 
 class UserModel(Base):

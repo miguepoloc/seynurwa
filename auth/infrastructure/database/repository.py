@@ -1,4 +1,6 @@
-"""User repository implementation."""
+"""Add find_by_id method to UserRepository."""
+
+from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -21,6 +23,23 @@ class UserRepository:
         stmt = select(UserModel).where(UserModel.email == email)
         result = self.session.execute(stmt)
         return result.scalar_one_or_none() is not None
+    
+    def find_by_id(self, user_id: UUID) -> User | None:
+        """Find user by ID."""
+        stmt = select(UserModel).where(UserModel.id == user_id)
+        result = self.session.execute(stmt)
+        model = result.scalar_one_or_none()
+        
+        if not model:
+            return None
+        
+        return User(
+            name=model.name,
+            email=Email(value=model.email),
+            hashed_password=HashedPassword(value=model.hashed_password),
+            id=model.id,
+            created_at=model.created_at
+        )
     
     def find_by_email(self, email: str) -> User | None:
         """Find user by email."""

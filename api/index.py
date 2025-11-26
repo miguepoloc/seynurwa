@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from auth.infrastructure.api.routes import router as auth_router
+from emotions.infrastructure.api.routes import router as emotions_router
 
 # Create FastAPI app
 app = FastAPI(
@@ -26,10 +27,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include auth routes
-app.include_router(auth_router, prefix="/api")
-
-# Health check
+# Include routers
+app.include_router(auth_router, prefix="/api", tags=["auth"])
+app.include_router(emotions_router, prefix="/api/emotions", tags=["emotions"])
 @app.get("/")
 async def root():
     """Root endpoint."""
