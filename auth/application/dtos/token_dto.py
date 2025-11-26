@@ -9,3 +9,4 @@ class TokenDTO(BaseModel):
     access_token: str
     token_type: str = "bearer"
     expires_in: int
+    name: str

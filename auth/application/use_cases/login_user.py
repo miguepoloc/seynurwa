@@ -38,5 +38,6 @@ class LoginUser:
         return TokenDTO(
             access_token=token,
             token_type="bearer",
-            expires_in=expires_in
+            expires_in=expires_in,
+            name=user.name
         )
